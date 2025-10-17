@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Location Tracker</title>
+</head>
+<body>
+    <h2>Employee Location Tracker</h2>
+    <form id="locationForm">
+        <label>Employee ID:</label>
+        <input type="text" id="E_id" name="E_id" required>
+        <button type="button" onclick="sendLocation()">Send</button>
+    </form>
+
+    <p id="status"></p>
+
+    <script>
+        function sendLocation() {
+            const e_id = document.getElementById("E_id").value;
+            if (!e_id) {
+                alert("Enter Employee ID");
+                return;
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    fetch("/save_location/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": getCookie("csrftoken")
+                        },
+                        body: `E_id=${e_id}&latitude=${lat}&longitude=${lon}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById("status").innerText = data.status === "success" 
+                            ? "Location saved successfully!"
+                            : data.message;
+                    });
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>
