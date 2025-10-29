@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Add User</title></head>
+<body>
+<h2>➕ Add User</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Username:</label><input type="text" name="username" required><br>
+    <label>Password:</label><input type="password" name="password" required><br>
+    <label>Employee ID:</label><input type="text" name="E_id" required><br>
+    <label>Employee Name:</label><input type="text" name="E_name" required><br>
+    <label>Salary:</label><input type="number" name="salary" required><br>
+    <label>Role:</label>
+    <select name="role">
+        <option>Employee</option>
+        <option>Manager</option>
+    </select><br>
+    <button type="submit">Add User</button>
+</form>
+<a href="{% url 'manager_dashboard' %}">⬅ Back</a>
+</body>
+</html>

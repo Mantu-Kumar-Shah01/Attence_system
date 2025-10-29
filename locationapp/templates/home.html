@@ -1,65 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Location Tracker</title>
+    <title>Mark Attendance</title>
 </head>
 <body>
-    <h2>Employee Location Tracker</h2>
-    <form id="locationForm">
+    <h2>📍 Employee Attendance</h2>
+    {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+    <form id="attendanceForm" method="POST">
+        {% csrf_token %}
         <label>Employee ID:</label>
-        <input type="text" id="E_id" name="E_id" required>
-        <button type="button" onclick="sendLocation()">Send</button>
+        <input type="text" name="E_id" id="empId" required onblur="toggleManagerButton()">
+        <input type="hidden" name="latitude" id="lat">
+        <input type="hidden" name="longitude" id="lon">
+        <button type="button" onclick="getLocation()">Mark Attendance</button>
     </form>
 
-    <p id="status"></p>
+    <div style="margin-top:12px;">
+        <a id="managerBtn" href="{% url 'manager_dashboard' %}" style="display:none;border:1px solid #888;padding:6px 10px;border-radius:6px;text-decoration:none;">Manager</a>
+    </div>
 
     <script>
-        function sendLocation() {
-            const e_id = document.getElementById("E_id").value;
-            if (!e_id) {
-                alert("Enter Employee ID");
-                return;
-            }
-
+        function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-
-                    fetch("/save_location/", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                            "X-CSRFToken": getCookie("csrftoken")
-                        },
-                        body: `E_id=${e_id}&latitude=${lat}&longitude=${lon}`
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        document.getElementById("status").innerText = data.status === "success" 
-                            ? "Location saved successfully!"
-                            : data.message;
-                    });
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    document.getElementById("lat").value = pos.coords.latitude;
+                    document.getElementById("lon").value = pos.coords.longitude;
+                    document.getElementById("attendanceForm").submit();
                 });
             } else {
-                alert("Geolocation is not supported by this browser.");
+                alert("Geolocation not supported.");
             }
         }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+        function toggleManagerButton(){
+            const eid = document.getElementById('empId').value.trim();
+            const btn = document.getElementById('managerBtn');
+            if (!eid) { btn.style.display = 'none'; return; }
+            fetch(`/employee_details/?E_id=${encodeURIComponent(eid)}`)
+              .then(r => r.json())
+              .then(data => {
+                if (data && data.is_manager === true) {
+                    btn.style.display = 'inline-block';
+                } else {
+                    btn.style.display = 'none';
                 }
-            }
-            return cookieValue;
+              })
+              .catch(() => { btn.style.display = 'none'; });
         }
+
     </script>
 </body>
 </html>
