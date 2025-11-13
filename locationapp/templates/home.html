@@ -4,132 +4,153 @@
 <head>
     <title>Mark Attendance</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(rgba(255,255,255,0.74), rgba(255,255,255,0.83)),
-                        url('{% static "images/background_image.jpg" %}');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;   /* ✅ Top padding removed */
-            min-height: 120vh;
-        }
 
-        .banner {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #fff;
-            border-bottom: 1px solid #d3e0ee;
+    <style>
+        /* ✅ Remove all unwanted scroll bars */
+        html, body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            height: 100%;
+            overflow-x: hidden;
         }
 
-        .banner img {
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+
+            background: 
+                linear-gradient(rgba(255,255,255,0.60), rgba(255,255,255,0.75)),
+                url('{% static "images/background_image.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        /* ✅ NAVBAR */
+        .navbar {
             width: 100%;
-            max-width: 650px;
-            height: 120px;
-            display: block;
-            margin: 0 auto;
+            background: rgba(255, 255, 255, 1);
+            backdrop-filter: blur(10px);
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.12);
         }
 
-        .logo-subtitle-bar {
-            width: 100%;
-            background: #fff;
-            padding: 4px 0 2px 0;
-            box-sizing: border-box;
-            border-top: 1px solid #e6eff9;
-            border-bottom: 1px solid #e6eff9;
+        .nav-left img {
+            height: 46px;
         }
 
-        .logo-subtitle-main {
-            text-align: center;
-            color: #215fe6;
-            font-size: 1.11em;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            line-height: 1.3;
+        .nav-right a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #304e9fff;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: 0.25s;
         }
 
-        .subtitle-grade {
-            color: #e13030;
-            font-size: 1.18em;
-            font-weight: 800;
+        .nav-right a:hover {
+            color: #2563eb;
         }
 
-        .subtitle-sep {
-            color: #bcd6f2;
-            font-weight: 800;
-            margin: 0 7px;
+        /* ✅ Responsive Navbar */
+        @media (max-width: 600px) {
+            .nav-right {
+                display: none;
+            }
         }
 
-        .logo-subtitle-tag {
-            text-align: center;
-            color: #4f5b6d;
-            font-size: 0.98em;
-            margin-top: 2px;
-            font-weight: 400;
-            letter-spacing: 0.2px;
+        /* ✅ CENTERED GLASS FORM */
+        .content-wrapper {
+            flex: 1; /* push footer down */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
         }
 
         .container {
+            width: 92%;
+            max-width: 380px;
+
             background: rgba(255,255,255,0.55);
-            max-width: 400px;
-            margin: 80px auto 80px auto;
-            padding: 36px 30px;
-            border-radius: 0;
-            box-shadow: 0 8px 28px 2px rgba(40,40,60,0.19), 0 2px 8px rgba(35,60,120,0.10);
+            backdrop-filter: blur(12px);
+            padding: 32px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(40,40,60,0.25);
         }
 
         h2 {
-            margin-top: 0;
-            color: #244776;
-            letter-spacing: 0.5px;
             text-align: center;
-            font-weight: 700;
-            font-size: 1.6rem;
-            margin-bottom: 1.5em;
+            font-size: 1.55rem;
+            color: #1f2a44;
+            margin-bottom: 20px;
         }
 
         label {
             font-weight: 500;
             color: #1a3255;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             display: block;
         }
+/* ✅ Updated Input Fields – clean, equal, professional */
+input[type="text"] {
+    width: 100%;                     /* ✅ Always full width */
+    height: 50px;                    /* ✅ Perfect equal height */
+    padding: 0 15px;                 /* ✅ Clean left-right padding */
+    border: 1.5px solid #c9d7f5;     /* ✅ Slightly thicker for visibility */
+    border-radius: 10px;             /* ✅ Smooth rounded look */
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.95);
+    font-size: 1.05rem;
+    font-weight: 500;
+    outline: none;
+    transition: 0.25s ease;
+    box-sizing: border-box;          /* ✅ Prevents uneven width */
+}
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px 12px;
-            margin-bottom: 18px;
-            border: 1px solid #cee2fa;
-            border-radius: 8px;
-            font-size: 1em;
-            outline: none;
-            transition: box-shadow 0.2s;
-        }
+input[type="text"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 8px rgba(37,99,235,0.25);
+    background: rgba(255,255,255,1);
+}
 
-        input[type="text"]:focus {
-            box-shadow: 0 0 4px #2686ff44;
-        }
+
+button[type="button"] {
+    width: 100%;
+    height: 48px;                 /* ✅ Same height as input */
+    background: #215fe6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.07rem;
+    cursor: pointer;
+    transition: 0.23s ease;
+}
+
+button[type="button"]:hover {
+    background: #1749b4;
+}
+
 
         button[type="button"] {
-            background: #215fe6;
-            color: #fff;
-            font-weight: 600;
-            padding: 12px 0;
-            border: none;
-            border-radius: 7px;
-            font-size: 1.08em;
-            cursor: pointer;
             width: 100%;
-            transition: background 0.19s;
-            margin-bottom: 9px;
+            padding: 12px;
+            background: #215fe6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
         button[type="button"]:hover {
@@ -137,92 +158,111 @@
         }
 
         #managerBtn {
-            background: #eef5fb;
-            color: #2678ca;
-            border: none;
-            margin-top: 10px;
-            font-weight: 600;
-            display: block;
+            display: none;
             width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #eef5fb;
+            color: #2563eb;
             text-align: center;
-            border-radius: 6px;
+            border-radius: 8px;
             text-decoration: none;
+            font-weight: 600;
         }
 
         .error-msg {
-            color: #d85a5a;
-            background: #ffebeb;
-            padding: 9px;
-            border-radius: 7px;
-            margin-bottom: 12px;
-            text-align: center;
-            border: 1px solid #f0bcbc;
-            font-size: 1em;
-        }
-
-        @media (max-width: 520px) {
-            .container { max-width: 98vw; padding: 14px 2vw; }
-            .banner img { height: 60px; max-width: 84vw; }
+            background: #ffe4e4;
+            border-left: 3px solid #e11d48;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            color: #b91c1c;
         }
     </style>
 </head>
+
 <body>
-    <div class="banner">
-        <img src="{% static 'images/logo.png' %}" alt="GGI NAAC Grade A+ Logo">
-        <div class="logo-subtitle-bar">
-            <div class="logo-subtitle-main">
-                Gulzar Group of Institutions 
-                <span class="subtitle-sep">|</span> 
-                NAAC Accredited <span class="subtitle-grade">A+</span>
-            </div>
-            <div class="logo-subtitle-tag">
-                Sharpening Minds, Brightening Tomorrow.
-            </div>
-        </div>
+
+<!-- ✅ Navbar -->
+<nav class="navbar">
+    <div class="nav-left">
+        <img src="{% static 'images/ggi_logo.png' %}" width="250px" alt="Logo">
     </div>
 
+    <div class="nav-right">
+        <a href="/">Home</a>
+
+        <!-- ✅ HR Requires Login -->
+        <a href="{% url 'login' %}?next={% url 'manager_dashboard' %}">HR</a>
+
+        <!-- ✅ Admin Requires Login -->
+        <a href="{% url 'login' %}?next=/admin/">Admin</a>
+    </div>
+</nav>
+
+
+<!-- ✅ Centered Page Content -->
+<div class="content-wrapper">
     <div class="container">
+
         <h2>📍 Employee Attendance</h2>
-        {% if error %}<div class="error-msg">{{ error }}</div>{% endif %}
+
+        {% if error %}
+        <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
         <form id="attendanceForm" method="POST">
             {% csrf_token %}
             <label>Employee ID:</label>
             <input type="text" name="E_id" id="empId" required onblur="toggleManagerButton()">
+
             <input type="hidden" name="latitude" id="lat">
             <input type="hidden" name="longitude" id="lon">
+
             <button type="button" onclick="getLocation()">Mark Attendance</button>
         </form>
-        <a id="managerBtn" href="{% url 'manager_dashboard' %}" style="display:none;">Manager</a>
+
+        <a id="managerBtn" href="{% url 'manager_dashboard' %}">Manager Dashboard</a>
+
     </div>
+</div>
 
-    <script>
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(pos) {
-                    document.getElementById("lat").value = pos.coords.latitude;
-                    document.getElementById("lon").value = pos.coords.longitude;
-                    document.getElementById("attendanceForm").submit();
-                });
-            } else {
-                alert("Geolocation not supported.");
-            }
-        }
 
-        function toggleManagerButton(){
-            const eid = document.getElementById('empId').value.trim();
-            const btn = document.getElementById('managerBtn');
-            if (!eid) { btn.style.display = 'none'; return; }
-            fetch(`/employee_details/?E_id=${encodeURIComponent(eid)}`)
-              .then(r => r.json())
-              .then(data => {
-                if (data && data.is_manager === true) {
-                    btn.style.display = 'block';
-                } else {
-                    btn.style.display = 'none';
-                }
-              })
-              .catch(() => { btn.style.display = 'none'; });
-        }
-    </script>
+<script>
+/* ✅ GPS Fetch */
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            document.getElementById("lat").value = pos.coords.latitude;
+            document.getElementById("lon").value = pos.coords.longitude;
+            
+            // ✅ Submit form and let page reload to show updated calendar
+            document.getElementById("attendanceForm").submit();
+        });
+    } else {
+        alert("Geolocation not supported.");
+    }
+}
+
+
+/* ✅ Show Manager Button */
+function toggleManagerButton() {
+    const eid = document.getElementById('empId').value.trim();
+    const btn = document.getElementById('managerBtn');
+
+    if (!eid) {
+        btn.style.display = 'none';
+        return;
+    }
+
+    fetch(`/employee_details/?E_id=${encodeURIComponent(eid)}`)
+        .then(r => r.json())
+        .then(data => {
+            btn.style.display = data.is_manager ? 'block' : 'none';
+        })
+        .catch(() => btn.style.display = 'none');
+}
+</script>
+
 </body>
 </html>

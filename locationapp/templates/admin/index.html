@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Admin Home - Dashboard{% endblock %}
+
+{% block content %}
+<div style="margin-top: 20px;">
+    <h2 style="color: var(--brand); margin-bottom: 30px; font-size: 28px;">Welcome to Admin Dashboard</h2>
+    
+    <!-- ✅ QUICK STATS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 30px;">
+        {% for app in app_list %}
+            {% for model in app.models %}
+                <div style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+                    <div style="color: var(--muted); font-size: 12px; margin-bottom: 8px;">{{ app.name }}</div>
+                    <h3 style="color: var(--brand); margin: 0 0 16px 0; font-size: 20px;">{{ model.name }}</h3>
+                    <a href="{{ model.admin_url }}" style="display: inline-block; background: linear-gradient(180deg, var(--brand), var(--brand-600)); color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; transition: 0.2s; font-weight: 600;">
+                        Manage →
+                    </a>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    
+    <!-- ✅ RECENT ACTIVITY -->
+    <div style="background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0)); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+        <h3 style="color: var(--brand); margin-top: 0; margin-bottom: 16px;">📊 System Overview</h3>
+        <p style="color: var(--muted);">Manage employees, attendance records, and view system statistics.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,29 +1,186 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head><title>Manager Dashboard</title></head>
+
+<head>
+    <title>Manager Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+
+            background:
+                linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.75)),
+                url('{% static "images/background_image.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* ✅ NAVBAR */
+        .navbar {
+            width: 100%;
+            background: rgba(255,255,255,1);
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.12);
+        }
+
+        .nav-left img {
+            height: 46px;
+        }
+
+        .nav-right a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #304e9f;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-right a:hover {
+            color: #2563eb;
+        }
+
+        /* ✅ MAIN CONTAINER */
+        .container {
+            width: 92%;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(10px);
+
+            border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(40,40,60,0.25);
+        }
+
+        h2 {
+            font-size: 1.7rem;
+            text-align: center;
+            color: #1f2a44;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #1f2a44;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        /* ✅ BUTTONS */
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #1749b4;
+        }
+
+        /* ✅ TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.92);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #d6e0f5;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #e8f0fe;
+            font-weight: 700;
+            color: #1a3255;
+        }
+
+        tr:nth-child(even) {
+            background: #f7faff;
+        }
+    </style>
+</head>
+
 <body>
-<h2>Welcome, {{ emp.E_name }} (Manager)</h2>
-<a href="{% url 'logout' %}">Logout</a> | 
-<a href="{% url 'add_user' %}">➕ Add User</a>
-<hr>
 
-<h3>👥 Employees</h3>
-<ul>
-{% for e in employees %}
-    <li>{{ e.E_name }} ({{ e.E_id }}) - ₹{{ e.salary }}</li>
-{% empty %}
-    <p>No employees yet.</p>
-{% endfor %}
-</ul>
+<!-- ✅ Navbar -->
+<nav class="navbar">
+    <div class="nav-left">
+        <img src="{% static 'images/logo.png' %}" alt="Logo">
+    </div>
 
-<h3>🗓️ Attendance Records</h3>
-<table border="1">
-<tr><th>Name</th><th>Date</th><th>Status</th></tr>
-{% for a in attendance %}
-<tr><td>{{ a.employee.E_name }}</td><td>{{ a.date }}</td><td>{{ a.status }}</td></tr>
-{% empty %}
-<tr><td colspan="3">No records.</td></tr>
-{% endfor %}
-</table>
+    <div class="nav-right">
+        <a href="/">Home</a>
+        <a href="{% url 'logout' %}" class="btn">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h2>👨‍💼 Welcome, {{ emp.E_name }} (Manager)</h2>
+
+    <a href="{% url 'add_user' %}" class="btn">➕ Add User</a>
+
+    <!-- ✅ Employee List -->
+    <h3>👥 Employees</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Employee ID</th>
+            <th>Salary</th>
+        </tr>
+
+        {% for e in employees %}
+        <tr>
+            <td>{{ e.E_name }}</td>
+            <td>{{ e.E_id }}</td>
+            <td>₹{{ e.salary }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No employees yet.</td></tr>
+        {% endfor %}
+    </table>
+
+    <!-- ✅ Attendance Table -->
+    <h3>🗓️ Attendance Records</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for a in attendance %}
+        <tr>
+            <td>{{ a.employee.E_name }}</td>
+            <td>{{ a.date }}</td>
+            <td>{{ a.status }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No attendance records.</td></tr>
+        {% endfor %}
+    </table>
+
+</div>
+
 </body>
 </html>

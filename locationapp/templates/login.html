@@ -1,14 +1,144 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head><title>Login</title></head>
+<head>
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+
+            background:
+                linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.75)),
+                url('{% static "images/background_image.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 92%;
+            max-width: 360px;
+
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 8px 28px rgba(40,40,60,0.20);
+
+            border-radius: 14px;
+            padding: 35px 30px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1f2a44;
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1a3255;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* ✅ Updated Input Fields (Equal Size Always) */
+        .input-field {
+            width: 100%;
+            height: 50px;
+            padding: 0 16px;
+            margin-bottom: 20px;
+
+            border: 1.6px solid #c9d7f5;
+            border-radius: 12px;
+
+            background: rgba(255,255,255,0.96);
+            font-size: 1.05rem;
+            font-weight: 500;
+
+            outline: none;
+            transition: 0.25s ease;
+            box-sizing: border-box; /* ✅ Prevents uneven sizes */
+        }
+
+        .input-field:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 8px rgba(37,99,235,0.25);
+        }
+
+        /* ✅ Equal-sized Button */
+        button {
+            width: 100%;
+            height: 50px;
+            background: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 12px;
+
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        button:hover {
+            background: #1749b4;
+        }
+
+        /* ✅ Error Box */
+        .error-msg {
+            background: #ffe4e4;
+            border-left: 4px solid #e11d48;
+
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+
+            color: #b91c1c;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
 <body>
-<h2>🔐 Login</h2>
-{% if error %}<p style="color:red">{{ error }}</p>{% endif %}
-<form method="POST">
-    {% csrf_token %}
-    <label>Username:</label><input type="text" name="username" required><br>
-    <label>Password:</label><input type="password" name="password" required><br>
-    <button type="submit">Login</button>
-</form>
+
+<div class="login-box">
+
+    <h2>🔐 Login</h2>
+
+    {% if error %}
+        <div class="error-msg">Invalid user</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <input type="text" name="username" class="input-field" required>
+
+        <label>Password</label>
+        <input type="password" name="password" class="input-field" required>
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <button type="submit">Login</button>
+    </form>
+
+</div>
+
 </body>
 </html>

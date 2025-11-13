@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from math import radians, sin, cos, sqrt, atan2
 
 # Fixed office coordinates
-OFFICE_LAT = 30.8697
-OFFICE_LON = 75.8865
+OFFICE_LAT = 30.866745
+OFFICE_LON = 75.924881
 
 
 class Employee(models.Model):
