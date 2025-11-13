@@ -5,210 +5,95 @@
 
 {% block extrastyle %}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,600,700&display=swap">
-
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+:root {
+    --bg: #0f172a;
+    --panel: #111827;
+    --panel-2: #0b1220;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --brand: #3b82f6;
+    --brand-600: #2563eb;
+    --accent: #22c55e;
+    --warn: #ef4444;
+    --card: #111827;
+    --border: #1f2937;
+}
 
-    :root {
-        --bg: #0f172a;
-        --panel: #111827;
-        --panel-2: #0b1220;
-        --text: #e5e7eb;
-        --muted: #94a3b8;
-        --brand: #3b82f6;
-        --brand-600: #2563eb;
-        --accent: #22c55e;
-        --warn: #ef4444;
-        --border: #1f2937;
-    }
+body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, Roboto;
+    background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0%, var(--bg) 60%),
+                radial-gradient(800px 500px at 110% 10%, #1f2937 0%, var(--bg) 50%),
+                var(--bg);
+    color: var(--text);
+}   
 
-    html, body {
-        height: 100%;
-        background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0%, var(--bg) 60%),
-                    radial-gradient(800px 500px at 110% 10%, #1f2937 0%, var(--bg) 50%),
-                    var(--bg);
-        color: var(--text);
-        font-family: 'Roboto', Arial, sans-serif;
-    }
+   #content h1 {
+    display: none !important;
+}
 
-    #header, #footer-line {
-        display: none !important;
-    }
+   #sidebar {
+    display: none !important;
+}
+.toggle-nav-sidebar {
+    display: none !important;
+}
 
-    #content {
-        margin-top: 80px;
-        padding: 30px;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+#admin-fixed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 32px;
+    margin: 28px auto 24px auto;
+    max-width: 1024px;
+    box-shadow: 0 8px 32px 0 rgba(41,81,183,.07);
+    backdrop-filter: blur(8px);
+}
 
-    #sidebar {
-        display: none !important;
-    }
-    .toggle-nav-sidebar {
-        display: none !important;
-    }
+#admin-fixed-header .title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: .2px;
+    margin: 0;
+}
 
-    .module {
-        background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        margin-bottom: 20px;
-        overflow: hidden;
-    }
+.custom-logout-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(180deg, #ef4444, #dc2626);
+    border: 1px solid #b91c1c;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    transition: transform .08s ease, background .18s ease, border-color .18s ease;
+}
 
-    .module h2 {
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
-        color: var(--brand);
-        border-bottom: 1px solid var(--border);
-        padding: 16px 20px;
-        margin: 0;
-        font-size: 18px;
-        font-weight: 600;
-    }
+.custom-logout-btn:hover, .custom-logout-btn:focus {
+    background: linear-gradient(180deg, #dc2626, #b91c1c);
+    border-color: #991b1b;
+    transform: translateY(-1px) scale(1.04);
+    box-shadow: 0 4px 24px rgba(239,68,68,0.24);
+}
 
-    .module table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .module thead th {
-        background: var(--panel-2);
-        color: var(--brand);
-        padding: 12px 16px;
-        text-align: left;
-        font-weight: 600;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .module tbody tr {
-        border-bottom: 1px solid var(--border);
-        transition: background 0.2s ease;
-    }
-
-    .module tbody tr:hover {
-        background: rgba(255, 255, 255, 0.02);
-    }
-
-    .module td {
-        padding: 12px 16px;
-        color: var(--text);
-    }
-
-    .module a {
-        color: var(--brand);
-        text-decoration: none;
-        transition: 0.2s;
-    }
-
-    .module a:hover {
-        color: var(--accent);
-    }
-
-    .button, input[type="submit"], a.button {
-        display: inline-block;
-        background: linear-gradient(180deg, var(--brand), var(--brand-600));
-        color: white;
-        border: 1px solid #1d4ed8;
-        border-radius: 8px;
-        padding: 10px 16px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: 0.2s;
-        font-weight: 600;
-    }
-    .button:hover, input[type="submit"]:hover, a.button:hover {
-        background: var(--brand-600);
-        transform: translateY(-1px);
-    }
-
-    .breadcrumbs {
-        background: transparent;
-        border-bottom: 1px solid var(--border);
-        padding: 12px 0 16px 0;
-        margin-bottom: 20px;
-        color: var(--muted);
-    }
-    .breadcrumbs a {
-        color: var(--brand);
-    }
-
-    form#changelist-form .results {
-        max-height: 600px;
-        overflow-y: auto;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        margin-top: 10px;
-    }
-
-    form#changelist-form .results table thead {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        background: var(--panel-2);
-    }
-
-    #admin-fixed-header {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        height: 70px !important;
-        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0)) !important;
-        border-bottom: 1px solid var(--border) !important;
-        z-index: 10000 !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 30px !important;
-        backdrop-filter: blur(8px) !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    #admin-fixed-header .title {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--brand);
-    }
-
-    #admin-fixed-header .spacer {
-        margin-left: auto;
-    }
-
-    .custom-logout-btn {
-        display: inline-block !important;
-        background: linear-gradient(180deg, #ef4444, #dc2626) !important;
-        color: white !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        text-decoration: none !important;
-        font-weight: 600 !important;
-        border: 1px solid #b91c1c !important;
-        transition: all 0.2s !important;
-        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3) !important;
-        cursor: pointer !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    .custom-logout-btn:hover {
-        background: linear-gradient(180deg, #dc2626, #b91c1c) !important;
-        transform: translateY(-1px) !important;
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
-    }
+@media (max-width: 640px){
+    #admin-fixed-header { flex-direction: column; align-items: flex-start; }
+    #admin-fixed-header .title { font-size: 20px; margin-bottom: 10px; }
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <div id="admin-fixed-header">
     <div class="title">👨‍💼 Admin Dashboard</div>
-    <div class="spacer">
-        <a href="{% url 'admin_logout_custom' %}" class="custom-logout-btn">🚪 Logout</a>
-    </div>
+    <a href="{% url 'admin_logout_custom' %}" class="custom-logout-btn">🚪 Logout</a>
 </div>
 
 {% block messages %}
@@ -223,28 +108,3 @@
 
 {{ block.super }}
 {% endblock %}
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Ensure admin header is visible
-    const adminHeader = document.getElementById("admin-fixed-header");
-    if (adminHeader) {
-        adminHeader.style.display = "flex";
-        adminHeader.style.visibility = "visible";
-        adminHeader.style.opacity = "1";
-        adminHeader.style.position = "fixed";
-        adminHeader.style.top = "0";
-        adminHeader.style.left = "0";
-        adminHeader.style.right = "0";
-        adminHeader.style.zIndex = "10000";
-    }
-
-    // Ensure logout button is visible
-    const logoutBtn = document.querySelector(".custom-logout-btn");
-    if (logoutBtn) {
-        logoutBtn.style.display = "inline-block";
-        logoutBtn.style.visibility = "visible";
-        logoutBtn.style.opacity = "1";
-    }
-});
-</script>
