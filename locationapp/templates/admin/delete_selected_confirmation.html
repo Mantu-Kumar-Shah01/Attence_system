@@ -1,26 +1,10 @@
-{% extends "admin/change_form.html" %}
+{% extends "admin/delete_selected_confirmation.html" %}
 {% load i18n admin_urls %}
-
-{% block object-tools-items %}
-    <li>
-        <a href="{% url 'admin:index' %}" class="button" style="background: linear-gradient(180deg, #ef4444, #dc2626); border-color: #b91c1c; margin-right: 10px;">
-            ← Back to Admin
-        </a>
-    </li>
-    {% if opts %}
-        <li>
-            <a href="{% url opts|admin_urlname:'changelist' %}" class="button" style="background: linear-gradient(180deg, var(--brand), var(--brand-600)); margin-right: 10px;">
-                ← Back to List
-            </a>
-        </li>
-    {% endif %}
-    {{ block.super }}
-{% endblock %}
 
 {% block content %}
 <div style="margin-bottom: 20px;">
     <a href="{% url 'admin:index' %}" style="display: inline-block; background: linear-gradient(180deg, #ef4444, #dc2626); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid #b91c1c; transition: 0.2s; margin-right: 10px;">
-        ← Back to Admin Dashboard
+        ← Back to Admin
     </a>
     {% if opts %}
     <a href="{% url opts|admin_urlname:'changelist' %}" style="display: inline-block; background: linear-gradient(180deg, var(--brand), var(--brand-600)); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid #1d4ed8; transition: 0.2s;">
@@ -30,3 +14,4 @@
 </div>
 {{ block.super }}
 {% endblock %}
+

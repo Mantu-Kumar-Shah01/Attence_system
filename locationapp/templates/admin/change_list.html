@@ -1,0 +1,21 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'admin:index' %}" class="button" style="background: linear-gradient(180deg, #ef4444, #dc2626); border-color: #b91c1c; margin-right: 10px;">
+            ← Back to Admin
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'admin:index' %}" style="display: inline-block; background: linear-gradient(180deg, #ef4444, #dc2626); color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid #b91c1c; transition: 0.2s; margin-bottom: 15px;">
+        ← Back to Admin Dashboard
+    </a>
+</div>
+{{ block.super }}
+{% endblock %}
+

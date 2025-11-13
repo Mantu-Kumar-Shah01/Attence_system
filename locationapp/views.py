@@ -62,6 +62,7 @@ def home(request):
                 "attendance_map": attendance_map,
                 "year": year,
                 "month": month,
+                "total_days": total_days,
             })
 
         except Employee.DoesNotExist:
@@ -94,7 +95,7 @@ def employee_details(request):
 # ------------------------- LOGIN -------------------------
 @csrf_protect
 def user_login(request):
-    next_url = request.GET.get("next", "/")
+    next_url = request.GET.get("next") or request.POST.get("next", "/")
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -137,35 +138,65 @@ def user_logout(request):
     logout(request)
     return redirect("home")  # ✅ Redirect to home instead of login
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def custom_admin_logout(request):
+    """Logout and redirect to home page"""
+    logout(request)
+    return redirect('home')
 
 
 # ------------------------- ADD USER -------------------------
 @login_required
 def add_user(request):
-    emp = Employee.objects.get(user=request.user)
+    emp = Employee.objects.filter(user=request.user).first()
 
-    if not emp.is_manager:
+    if not emp or not emp.is_manager:
         return redirect("employee_dashboard")
 
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        E_id = request.POST["E_id"]
-        E_name = request.POST["E_name"]
-        salary = request.POST["salary"]
-        role = request.POST["role"]
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        E_id = request.POST.get("E_id")
+        E_name = request.POST.get("E_name")
+        salary = request.POST.get("salary")
+        role = request.POST.get("role")
 
-        user = User.objects.create_user(username=username, password=password)
+        # Validate required fields
+        if not all([username, password, E_id, E_name, salary]):
+            return render(request, "add_user.html", {
+                "error": "All fields are required."
+            })
 
-        Employee.objects.create(
-            user=user,
-            E_id=E_id,
-            E_name=E_name,
-            salary=salary,
-            is_manager=(role == "Manager")
-        )
+        # Check for duplicate username
+        if User.objects.filter(username=username).exists():
+            return render(request, "add_user.html", {
+                "error": "Username already exists."
+            })
 
-        return redirect("manager_dashboard")
+        # Check for duplicate Employee ID
+        if Employee.objects.filter(E_id=E_id).exists():
+            return render(request, "add_user.html", {
+                "error": "Employee ID already exists."
+            })
+
+        try:
+            user = User.objects.create_user(username=username, password=password)
+
+            Employee.objects.create(
+                user=user,
+                E_id=E_id,
+                E_name=E_name,
+                salary=salary,
+                is_manager=(role == "Manager")
+            )
+
+            return redirect("manager_dashboard")
+        except Exception as e:
+            return render(request, "add_user.html", {
+                "error": f"Error creating user: {str(e)}"
+            })
 
     return render(request, "add_user.html")
 
@@ -194,7 +225,10 @@ def manager_dashboard(request):
 # ------------------------- EMPLOYEE DASHBOARD -------------------------
 @login_required
 def employee_dashboard(request):
-    emp = Employee.objects.get(user=request.user)
+    emp = Employee.objects.filter(user=request.user).first()
+    
+    if not emp:
+        return redirect("login")
 
     # Get all attendance records
     records = Attendance.objects.filter(employee=emp).order_by("-date")
@@ -229,4 +263,5 @@ def employee_dashboard(request):
         "attendance_map": attendance_map,
         "year": year,
         "month": month,
+        "total_days": total_days,
     })

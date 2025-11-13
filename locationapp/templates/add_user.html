@@ -1,20 +1,87 @@
 <!DOCTYPE html>
 <html>
-<head><title>Add User</title></head>
+<head>
+    <title>Add User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .error-msg {
+            background: #ffe4e4;
+            border-left: 4px solid #e11d48;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            color: #b91c1c;
+            font-size: 0.95rem;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #1749b4;
+        }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
 <body>
 <h2>➕ Add User</h2>
+
+{% if error %}
+    <div class="error-msg">{{ error }}</div>
+{% endif %}
+
 <form method="POST">
     {% csrf_token %}
-    <label>Username:</label><input type="text" name="username" required><br>
-    <label>Password:</label><input type="password" name="password" required><br>
-    <label>Employee ID:</label><input type="text" name="E_id" required><br>
-    <label>Employee Name:</label><input type="text" name="E_name" required><br>
-    <label>Salary:</label><input type="number" name="salary" required><br>
+    <label>Username:</label>
+    <input type="text" name="username" required><br>
+    
+    <label>Password:</label>
+    <input type="password" name="password" required><br>
+    
+    <label>Employee ID:</label>
+    <input type="text" name="E_id" required><br>
+    
+    <label>Employee Name:</label>
+    <input type="text" name="E_name" required><br>
+    
+    <label>Salary:</label>
+    <input type="number" name="salary" step="0.01" required><br>
+    
     <label>Role:</label>
     <select name="role">
         <option>Employee</option>
         <option>Manager</option>
     </select><br>
+    
     <button type="submit">Add User</button>
 </form>
 <a href="{% url 'manager_dashboard' %}">⬅ Back</a>
