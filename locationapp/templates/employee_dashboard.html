@@ -35,6 +35,37 @@
     }
     .brand { font-weight: 700; letter-spacing: .3px; }
     .muted { color: var(--muted); }
+       
+    /* Add scrollbar to results div */
+.results {
+    max-height: 600px !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+/* Custom scrollbar styling */
+.results::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.results::-webkit-scrollbar-track {
+    background: var(--panel-2);
+    border-radius: 8px;
+}
+
+.results::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 8px;
+}
+
+.results::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+}
+
+
 
     .btn {
         display: inline-block; padding: 8px 12px; border-radius: 10px; text-decoration: none; color: white;
