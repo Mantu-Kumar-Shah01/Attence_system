@@ -8,6 +8,12 @@ from .models import Employee, Attendance, calculate_distance, OFFICE_LAT, OFFICE
 from datetime import date
 from calendar import monthrange
 
+try:
+    from django.utils.http import url_has_allowed_host_and_scheme
+except ImportError:
+    from django.utils.http import is_safe_url
+    url_has_allowed_host_and_scheme = is_safe_url
+
 
 # ------------------------- HOME (Attendance Marking) -------------------------
 def home(request):
@@ -95,7 +101,7 @@ def employee_details(request):
 # ------------------------- LOGIN -------------------------
 @csrf_protect
 def user_login(request):
-    next_url = request.GET.get("next") or request.POST.get("next", "/")
+    next_url = request.GET.get("next") or request.POST.get("next") or "/"
 
     if request.method == "POST":
         username = request.POST.get("username")
@@ -103,25 +109,27 @@ def user_login(request):
 
         user = authenticate(request, username=username, password=password)
 
-        if not user:
+        if not user or not user.is_active:
             return render(request, "login.html", {
-                "error": "Invalid username or password.",
+                "error": "Invalid username, password, or inactive user.",
                 "next": next_url
             })
 
         login(request, user)
 
-        # SUPERUSER → Admin Panel
+        allowed_hosts = {request.get_host()}
+        if not url_has_allowed_host_and_scheme(next_url, allowed_hosts=allowed_hosts):
+            next_url = "/"
+
         if user.is_superuser:
             return redirect("/admin/")
 
-        # NORMAL USER (must have Employee profile)
         emp = Employee.objects.filter(user=user).first()
 
         if not emp:
             logout(request)
             return render(request, "login.html", {
-                "error": "No employee profile linked.",
+                "error": "No employee profile linked to this user.",
                 "next": next_url
             })
 
@@ -131,7 +139,6 @@ def user_login(request):
         return redirect("employee_dashboard")
 
     return render(request, "login.html", {"next": next_url})
-
 
 # ------------------------- LOGOUT -------------------------
 def user_logout(request):

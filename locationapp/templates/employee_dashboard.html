@@ -69,6 +69,29 @@
     table { width: 100%; border-collapse: collapse; }
     th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
     tr:hover td { background: rgba(255,255,255,0.02); }
+    
+     /* Make tbody scrollable with fixed height */
+#result-list {
+    width: 100%;
+    border-collapse: collapse;
+    display: block; /* makes table block so tbody can scroll */
+}
+
+#result-list thead, 
+#result-list tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* fixed layout to align columns */
+}
+
+#result-list tbody {
+    display: block;       /* tbody block for scrolling */
+    max-height: 400px;    /* set desired max height */
+    overflow-y: auto;     /* vertical scrollbar */
+    overflow-x: hidden;
+}
+
+
 
     /* ✅ CALENDAR STYLES */
 #calendar {
