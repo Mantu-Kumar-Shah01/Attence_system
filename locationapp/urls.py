@@ -10,4 +10,7 @@ urlpatterns = [
     path("manager_dashboard/", views.manager_dashboard, name="manager_dashboard"),
     path("employee_dashboard/", views.employee_dashboard, name="employee_dashboard"),
     path("add_user/", views.add_user, name="add_user"),
+    path('add_employee/', views.add_employee, name='add_employee'),
+    path('edit_salary/<int:employee_id>/', views.edit_salary, name='edit_salary'),
+    path('delete_employee/<int:employee_id>/', views.delete_employee, name='delete_employee'),
 ]

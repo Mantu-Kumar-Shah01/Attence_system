@@ -7,6 +7,10 @@ from django.contrib.auth.models import User
 from .models import Employee, Attendance, calculate_distance, OFFICE_LAT, OFFICE_LON
 from datetime import date
 from calendar import monthrange
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import Employee, Attendance
+from datetime import datetime
 
 try:
     from django.utils.http import url_has_allowed_host_and_scheme
@@ -207,26 +211,201 @@ def add_user(request):
 
     return render(request, "add_user.html")
 
+# ------------------------- ADD USER -------------------------
+
+def add_employee(request):
+    emp = Employee.objects.filter(user=request.user).first()
+
+    if not emp or not emp.is_manager:
+        return redirect("employee_dashboard")
+
+    if request.method == "POST":
+        E_id = request.POST.get("E_id")
+        E_name = request.POST.get("E_name")
+        salary = request.POST.get("salary")
+        is_manager = request.POST.get("is_manager") == "on"  # checkbox value
+
+        # Validate required fields
+        if not all([E_id, E_name, salary]):
+            return render(request, "add_employee.html", {
+                "error": "All fields are required."
+            })
+
+        # Check for duplicate Employee ID
+        if Employee.objects.filter(E_id=E_id).exists():
+            return render(request, "add_employee.html", {
+                "error": "Employee ID already exists."
+            })
+
+        try:
+            Employee.objects.create(
+                E_id=E_id,
+                E_name=E_name,
+                salary=salary,
+                is_manager=is_manager
+            )
+
+            return redirect("manager_dashboard")
+        except Exception as e:
+            return render(request, "add_employee.html", {
+                "error": f"Error creating employee: {str(e)}"
+            })
+
+    return render(request, "add_employee.html")
+
+# ------------------------- GREETING MANAGER -------------------------
+
+
+def get_greeting():
+    hour = datetime.now().hour
+    if hour < 12:
+        return "Good morning"
+    elif hour < 17:
+        return "Good afternoon"
+    else:
+        return "Good evening"
 
 # ------------------------- MANAGER DASHBOARD -------------------------
 @login_required
 def manager_dashboard(request):
     emp = Employee.objects.filter(user=request.user).first()
-
-    if not emp:
-        return redirect("login")
-
-    if not emp.is_manager:
+    greeting = get_greeting() 
+    
+    if not emp or not emp.is_manager:
         return redirect("employee_dashboard")
+    
+    user_permissions = request.user.get_all_permissions()
+    
+    permissions = {
+        'can_view_attendance': 'locationapp.can_view_attendance' in user_permissions,
+        'can_edit_salary': 'locationapp.can_edit_salary' in user_permissions,
+        'can_add_employee': 'locationapp.can_add_employee' in user_permissions,
+        'can_delete_employee': 'locationapp.can_delete_employee' in user_permissions,
+        'can_view_reports': 'locationapp.can_view_reports' in user_permissions,
+    }
+    
+    employees_raw = Employee.objects.all()
+    attendance = Attendance.objects.all()
 
-    employees = Employee.objects.all()
-    attendance = Attendance.objects.all().order_by("-date")
+    # Add present and absent count for each employee
+    employees = []
+    for e in employees_raw:
+        present_count = attendance.filter(employee=e, status='Present').count()
+        absent_count = attendance.filter(employee=e, status='Absent').count()
+        employees.append({
+            'E_name': e.E_name,
+            'E_id': e.E_id,
+            'salary': e.salary,
+            'id': e.id,
+            'present_count': present_count,
+            'absent_count': absent_count,
+        })
 
-    return render(request, "manager_dashboard.html", {
-        "employees": employees,
-        "attendance": attendance,
-        "emp": emp,
-    })
+    total_present = attendance.filter(status='Present').count()
+    total_absent = attendance.filter(status='Absent').count()
+    
+    error = None
+    success = None
+    
+    # Handle Add Employee form submission
+    if request.method == "POST" and permissions['can_add_employee']:
+        E_id = request.POST.get("E_id")
+        E_name = request.POST.get("E_name")
+        salary = request.POST.get("salary")
+        is_manager = request.POST.get("is_manager") == "on"
+        
+        if not all([E_id, E_name, salary]):
+            error = "All fields are required."
+        elif Employee.objects.filter(E_id=E_id).exists():
+            error = "Employee ID already exists."
+        else:
+            try:
+                Employee.objects.create(
+                    E_id=E_id,
+                    E_name=E_name,
+                    salary=salary,
+                    is_manager=is_manager
+                )
+                success = f"Employee {E_name} added successfully!"
+                # Refresh list after adding
+                employees_raw = Employee.objects.all()
+                employees = []
+                for e in employees_raw:
+                    present_count = attendance.filter(employee=e, status='Present').count()
+                    absent_count = attendance.filter(employee=e, status='Absent').count()
+                    employees.append({
+                        'E_name': e.E_name,
+                        'E_id': e.E_id,
+                        'salary': e.salary,
+                        'id': e.id,
+                        'present_count': present_count,
+                        'absent_count': absent_count,
+                    })
+            except Exception as e:
+                error = f"Error creating employee: {str(e)}"
+    
+    context = {
+        'emp': emp,
+        'employees': employees,
+        'attendance': attendance,
+        'permissions': permissions,
+        'total_present': total_present,
+        'total_absent': total_absent,
+        'error': error,
+        'success': success,
+        'greeting': greeting,
+    }
+    
+    return render(request, 'manager_dashboard.html', context)
+def edit_salary(request, employee_id):
+    emp = Employee.objects.filter(user=request.user).first()
+    
+    if not emp or not emp.is_manager:
+        return redirect("employee_dashboard")
+    
+    if not request.user.has_perm('locationapp.can_edit_salary'):
+        return redirect("manager_dashboard")
+    
+    employee = get_object_or_404(Employee, id=employee_id)
+    
+    if request.method == "POST":
+        new_salary = request.POST.get("salary")
+        
+        if new_salary and float(new_salary) >= 0:
+            employee.salary = float(new_salary)
+            employee.save()
+            return redirect("manager_dashboard")
+        else:
+            return render(request, 'edit_salary.html', {
+                'employee': employee,
+                'error': 'Invalid salary amount.'
+            })
+    attendance = Attendance.objects.all()
+
+    total_present = attendance.filter(status='Present').count()
+    total_absent = attendance.filter(status='Absent').count()
+
+   
+    return render(request, 'edit_salary.html', {'employee': employee})
+
+
+# ✅ DELETE EMPLOYEE VIEW
+def delete_employee(request, employee_id):
+    emp = Employee.objects.filter(user=request.user).first()
+    
+    if not emp or not emp.is_manager:
+        return redirect("employee_dashboard")
+    
+    if not request.user.has_perm('locationapp.can_delete_employee'):
+        return redirect("manager_dashboard")
+    
+    employee = get_object_or_404(Employee, id=employee_id)
+    
+    if request.method == "POST":
+        employee.delete()
+        return redirect("manager_dashboard")
+    
+    return render(request, 'delete_employee.html', {'employee': employee})
 
 
 # ------------------------- EMPLOYEE DASHBOARD -------------------------

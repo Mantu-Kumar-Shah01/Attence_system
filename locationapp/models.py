@@ -16,6 +16,15 @@ class Employee(models.Model):
     salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     is_manager = models.BooleanField(default=False)
 
+    class Meta:
+        permissions = [
+            ('can_view_attendance', 'Can view attendance records'),
+            ('can_edit_salary', 'Can edit employee salary'),
+            ('can_add_employee', 'Can add new employees'),
+            ('can_delete_employee', 'Can delete employees'),
+            ('can_view_reports', 'Can view reports'),
+        ]
+
     def __str__(self):
         return f"{self.E_name} ({self.E_id})"
 
