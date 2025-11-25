@@ -43,11 +43,12 @@
 
         .nav-left img {
             height: 46px;
+            margin-left:20px;
         }
-
+         
         .nav-right a {
-            margin-left: 20px;
             text-decoration: none;
+            margin-left:20px;
             color: #304e9fff;
             font-weight: 600;
             font-size: 1rem;
@@ -174,13 +175,14 @@ button[type="button"]:hover {
     </div>
 
     <div class="nav-right">
+        <div>
         <a href="/">Home</a>
-
+        
         <!-- ✅ HR Requires Login -->
         <a href="{% url 'login' %}?next={% url 'manager_dashboard' %}">HR</a>
 
-        <!-- ✅ Admin Requires Login -->
-        <a href="{% url 'login' %}?next=/admin/">Admin</a>
+      <!-- ✅ Admin Requires Login -->
+        <a href="{% url 'login' %}?next=/admin/">Admin</a> </div>
     </div>
 </nav>
 

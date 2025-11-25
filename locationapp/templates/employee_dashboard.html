@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,6 @@
         {% endif %}
     </div>
 </div>
-
 
 
     <!-- ✅ MAIN GRID -->
@@ -66,6 +66,54 @@
                     <div class="value">{% if records %}{{ records.0.date }}{% else %}-{% endif %}</div>
                 </div>
             </div>
+
+            <!-- ✅ QUICK ACTIONS SECTION -->
+<div class="action-section card">
+    
+    <!-- Check-out button -->
+   {% if today_record and today_record.check_in_time and not today_record.check_out_time %}
+    <div class="status-box checked-in">
+        <p class="status-title">
+            Arrive at {{ today_record.check_in_time|time:"h:i A" }}
+        </p>
+        <p class="status-detail">
+             Auto-checkout monitoring active (&gt;100m from office)
+        </p>
+    </div>
+    <div  class="action-buttons">
+        <a  href="{% url 'checkout' %}?E_id={{ emp.E_id }}" class="btn btn-checkout">
+     Manual Depart
+</a>
+
+    </div>
+{% elif today_record and today_record.check_out_time %}
+    <div class="status-box checked-out">
+        <p class="status-title">
+             Checked in: {{ today_record.check_in_time|time:"h:i A" }} | 
+             Checked out: {{ today_record.check_out_time|time:"h:i A" }}
+        </p>
+        <p class="status-detail">
+            ⏱ Hours worked: {{ today_record.hours_worked }} hours
+            {% if today_record.auto_checkout %}
+                <span class="badge-auto"> Auto Check-out</span>
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
+
+    
+    <!-- Action buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'employee_salary_summary' %}?E_id={{ emp.E_id }}" class="btn btn-salary">
+             View My Salary
+        </a>
+        
+        <button onclick="location.reload();" class="btn btn-refresh" type="button">
+          Refresh Dashboard
+         </button>
+
+    </div>
+</div>
         </div>
 
 
@@ -171,8 +219,46 @@
     generateCalendar();
 </script>
 
+<!-- ✅ AUTO-CHECKOUT MONITORING -->
+{% if emp.is_checked_in %}
+<script>
+// Auto-checkout monitoring - checks location every 60 seconds
+function monitorLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            
+            // Send location to server
+            fetch("{% url 'update_location' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `latitude=${lat}&longitude=${lon}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.auto_checked_out) {
+                    // Show notification and reload page
+                    alert(" You were automatically checked out because you moved " + data.distance + "m from office (>100m limit).");
+                    window.location.reload();
+                }
+                console.log("Location updated - Distance: " + data.distance + "m");
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+}
 
+// Check location every 60 seconds when checked in
+setInterval(monitorLocation, 60000);
 
+// Initial check
+monitorLocation();
+</script>
+{% endif %}
 
 </body>
 </html>

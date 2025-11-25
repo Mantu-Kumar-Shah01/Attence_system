@@ -85,5 +85,45 @@
     <button type="submit">Add User</button>
 </form>
 <a href="{% url 'manager_dashboard' %}">⬅ Back</a>
+
+
+<!-- Add these fields to your add_employee.html and add_user.html forms -->
+
+<div class="form-group">
+    <label for="salary_type">Salary Type:</label>
+    <select name="salary_type" id="salary_type" class="form-control" onchange="toggleSalaryFields()" required>
+        <option value="monthly">Monthly Fixed (Days-based)</option>
+        <option value="hourly">Hourly Rate (Hours-based)</option>
+    </select>
+</div>
+
+<div class="form-group" id="monthly_salary_field">
+    <label for="monthly_salary">Monthly Salary (₹):</label>
+    <input type="number" step="0.01" name="monthly_salary" id="monthly_salary" class="form-control" placeholder="e.g., 50000">
+</div>
+
+<div class="form-group" id="hourly_rate_field" style="display: none;">
+    <label for="hourly_rate">Hourly Rate (₹):</label>
+    <input type="number" step="0.01" name="hourly_rate" id="hourly_rate" class="form-control" placeholder="e.g., 500">
+</div>
+
+<script>
+function toggleSalaryFields() {
+    const salaryType = document.getElementById('salary_type').value;
+    const monthlyField = document.getElementById('monthly_salary_field');
+    const hourlyField = document.getElementById('hourly_rate_field');
+    
+    if (salaryType === 'monthly') {
+        monthlyField.style.display = 'block';
+        hourlyField.style.display = 'none';
+        document.getElementById('hourly_rate').value = '';
+    } else {
+        monthlyField.style.display = 'none';
+        hourlyField.style.display = 'block';
+        document.getElementById('monthly_salary').value = '';
+    }
+}
+</script>
+
 </body>
 </html>

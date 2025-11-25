@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Report - {{ employee.E_name }}</title>
+    <style>
+        /* Previous styles... */
+        
+        .breakdown-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        
+        .breakdown-table th,
+        .breakdown-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .breakdown-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1> Salary Report</h1>
+            <p>{{ employee.E_name }} ({{ employee.E_id }})</p>
+            <p>{{ month }}/{{ year }}</p>
+        </div>
+        
+        <div class="content">
+            <!-- Working Days Summary -->
+            <div class="info-card">
+                <h3> Working Days Summary</h3>
+                <table class="breakdown-table">
+                    <tr>
+                        <td><strong>Weekday Work:</strong></td>
+                        <td>{{ weekday_count }} days</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sunday Work:</strong></td>
+                        <td>{{ sunday_count }} days <span class="badge badge-sunday">Overtime</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Full Days Completed:</strong></td>
+                        <td>{{ full_days_worked }} / 26 days</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Hours Breakdown -->
+            <div class="info-card">
+                <h3> Hours Breakdown</h3>
+                <table class="breakdown-table">
+                    <tr>
+                        <td><strong>Regular Hours:</strong></td>
+                        <td>{{ total_regular_hours }} hours</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Overtime Hours:</strong></td>
+                        <td>{{ total_overtime_hours }} hours</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Hours:</strong></td>
+                        <td><strong>{{ total_hours }} hours</strong></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Salary Calculation -->
+            <div class="info-card">
+                <h3> Salary Calculation</h3>
+                
+                {% if salary_type == 'monthly' %}
+                <div class="highlight">
+                    <p><strong>Calculation Method:</strong> Monthly (26 working days)</p>
+                    <p><strong>Monthly Rate:</strong> ₹{{ monthly_salary }} / 26 days = ₹{{ monthly_salary|floatformat:2|add:"0"|mul:"0"|div:"26"|floatformat:2 }} per day</p>
+                </div>
+                {% else %}
+                <div class="highlight">
+                    <p><strong>Calculation Method:</strong> Hourly Rate</p>
+                    <p><strong>Hourly Rate:</strong> ₹{{ hourly_rate }}/hour</p>
+                </div>
+                {% endif %}
+                
+                <table class="breakdown-table">
+                    <tr>
+                        <td><strong>Base Salary:</strong></td>
+                        <td>₹{{ base_salary }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Overtime Salary ({{ overtime_multiplier }}x):</strong></td>
+                        <td>₹{{ overtime_salary }}</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td><strong>Total Calculated:</strong></td>
+                        <td><strong>₹{{ calculated_salary }}</strong></td>
+                    </tr>
+                    {% if has_adjustment %}
+                    <tr>
+                        <td><strong>HR Adjustment:</strong></td>
+                        <td>{{ adjustment.adjustment_reason }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            
+            <!-- Final Salary -->
+            <div class="salary-box">
+                <h2>₹{{ final_salary }}</h2>
+                <p>Final Monthly Salary</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{% url 'employee_dashboard' %}" class="btn">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

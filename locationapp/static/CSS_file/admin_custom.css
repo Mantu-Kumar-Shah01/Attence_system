@@ -1,0 +1,485 @@
+
+    :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-2: #0b1220;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --brand: #3b82f6;
+        --brand-600: #2563eb;
+        --accent: #22c55e;
+        --warn: #ef4444;
+        --card: #111827;
+        --border: #1f2937;
+    }
+
+    body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, Roboto;
+        background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0%, var(--bg) 60%),
+                    radial-gradient(800px 500px at 110% 10%, #1f2937 0%, var(--bg) 50%),
+                    var(--bg);
+        color: var(--text);
+    }
+
+    /* Hide default admin elements */
+    #content h1 {
+        display: none !important;
+    }
+
+    /* Remove all sidebar and nav elements */
+    #sidebar {
+        display: none !important;
+    }
+
+    .toggle-nav-sidebar {
+        display: none !important;
+    }
+
+    /* Remove sticky nav-sidebar */
+    nav#nav-sidebar {
+        display: none !important;
+    }
+
+    nav#nav-sidebar.sticky {
+        display: none !important;
+    }
+
+    #nav-sidebar {
+        display: none !important;
+    }
+
+    .sticky {
+        display: none !important;
+    }
+
+    nav.sidebar {
+        display: none !important;
+    }
+
+    .nav-sidebar,
+    [role="navigation"],
+    .nav {
+        display: none !important;
+    }
+    .theme-toggle { display: none !important; }
+
+
+    /* Custom admin header */
+    #admin-fixed-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 32px;
+        margin: 28px auto 24px auto;
+        max-width: 1024px;
+        box-shadow: 0 8px 32px 0 rgba(41,81,183,.07);
+        backdrop-filter: blur(8px);
+    }
+
+    #admin-fixed-header .title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--brand);
+        letter-spacing: .2px;
+        margin: 0;
+    }
+
+    /* Custom logout button */
+    .custom-logout-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #fff;
+        background: linear-gradient(180deg, #ef4444, #dc2626);
+        border: 1px solid #b91c1c;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+        transition: transform .08s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .custom-logout-btn:hover,
+    .custom-logout-btn:focus {
+        background: linear-gradient(180deg, #dc2626, #b91c1c);
+        border-color: #991b1b;
+        transform: translateY(-1px) scale(1.04);
+        box-shadow: 0 4px 24px rgba(239,68,68,0.24);
+    }
+
+   
+
+    /* Add scrollbar to results div */
+    .results {
+        max-height: 600px !important;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+    }
+
+ 
+
+    /* Responsive design */
+    @media (max-width: 640px) {
+        #admin-fixed-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        #admin-fixed-header .title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        form#changelist-form {
+            max-height: 500px !important;
+        }
+        .results {
+            max-height: 400px !important;
+        }
+    }
+/* Admin Header */
+#header {
+    background: linear-gradient(90deg, #202b42 60%, #2563eb 100%);
+    color: #e5e7eb !important;
+    border-bottom: 2px solid #2563eb !important;
+    font-family: 'Roboto', ui-sans-serif, system-ui;
+    box-shadow: 0 4px 16px rgba(32,43,66,0.16);
+    min-height: 60px;
+    padding: 0 32px;
+}
+
+/* Red logout button - exact styling */
+#logout-form,
+#header #logout-form,
+html body #header #logout-form {
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* Logout button matching dark blue admin header theme */
+#logout-form,
+#header #logout-form,
+html body #header #logout-form {
+    display: inline-block !important;
+    margin: 0 0 0 15px !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+#logout-form button[type="submit"],
+#header #logout-form button[type="submit"],
+html body #header #logout-form button[type="submit"],
+body #header #logout-form button[type="submit"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 40px !important;
+    padding: 0 24px !important;
+    border-radius: 8px !important;
+    color: #e5e7eb !important;
+    background: linear-gradient(90deg, #202b42 0%, #2563eb 100%) !important;
+    border: 1px solid rgba(37, 99, 235, 0.5) !important;
+    font-weight: 600 !important;
+    font-size: 0 !important; /* Hide original "Log out" text */
+    cursor: pointer !important;
+    box-shadow: 0 2px 8px rgba(32, 43, 66, 0.2) !important;
+    transition: all 0.2s ease !important;
+    font-family: 'Roboto', ui-sans-serif, system-ui !important;
+    text-transform: none !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+/* Replace "Log out" with "Logout" */
+#logout-form button[type="submit"]::after,
+#header #logout-form button[type="submit"]::after,
+html body #header #logout-form button[type="submit"]::after {
+    content: "Logout" !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #e5e7eb !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* Hover state - brighter blue */
+#logout-form button[type="submit"]:hover,
+#header #logout-form button[type="submit"]:hover,
+html body #header #logout-form button[type="submit"]:hover {
+    background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%) !important;
+    border-color: #2563eb !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4) !important;
+}
+
+#logout-form button[type="submit"]:hover::after,
+#header #logout-form button[type="submit"]:hover::after {
+    color: #fff !important;
+}
+
+/* Focus state */
+#logout-form button[type="submit"]:focus,
+#header #logout-form button[type="submit"]:focus,
+html body #header #logout-form button[type="submit"]:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3), 0 4px 16px rgba(37, 99, 235, 0.4) !important;
+}
+
+/* Active/Click state */
+#logout-form button[type="submit"]:active,
+#header #logout-form button[type="submit"]:active {
+    transform: translateY(0) scale(0.98) !important;
+    box-shadow: 0 2px 8px rgba(32, 43, 66, 0.25) !important;
+}
+
+/* Responsive - mobile adjustments */
+@media (max-width: 768px) {
+    #logout-form button[type="submit"]::after,
+    #header #logout-form button[type="submit"]::after {
+        font-size: 14px !important;
+    }
+    
+    #logout-form button[type="submit"],
+    #header #logout-form button[type="submit"] {
+        height: 36px !important;
+        padding: 0 18px !important;
+    }
+}
+
+
+
+/* Breadcrumbs matching your admin panel dark blue theme */
+nav[aria-label="Breadcrumbs"],
+html body nav[aria-label="Breadcrumbs"],
+body nav[aria-label="Breadcrumbs"] {
+    background: linear-gradient(90deg, #1c2841 0%, #202b42 100%) !important;
+    color: #e5e7eb !important;
+    padding: 10px 20px !important;
+  
+    border: 1px solid rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 2px 12px rgba(32, 43, 66, 0.15) !important;
+    
+    font-family: 'Roboto', ui-sans-serif, system-ui !important;
+}
+
+/* Breadcrumb links - matching header link color */
+nav[aria-label="Breadcrumbs"] a,
+html body nav[aria-label="Breadcrumbs"] a,
+body nav[aria-label="Breadcrumbs"] a {
+    color: #7ab8ff !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease, background 0.2s ease !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+}
+
+/* Breadcrumb links hover - blue highlight */
+nav[aria-label="Breadcrumbs"] a:hover,
+html body nav[aria-label="Breadcrumbs"] a:hover,
+body nav[aria-label="Breadcrumbs"] a:hover {
+    color: #fff !important;
+    background: rgba(37, 99, 235, 0.6) !important;
+    text-decoration: none !important;
+}
+
+/* Breadcrumb separator and text */
+nav[aria-label="Breadcrumbs"] .breadcrumbs,
+nav[aria-label="Breadcrumbs"] div,
+nav[aria-label="Breadcrumbs"] {
+    color: #e5e7eb !important;
+}
+
+/* Override CSS variables */
+:root {
+    --breadcrumbs-bg: linear-gradient(90deg, #1c2841 0%, #202b42 100%) !important;
+    --breadcrumbs-fg: #e5e7eb !important;
+}
+
+#user-tools,
+#branding,
+#header a,
+#user-tools a {
+    color: #7ab8ff !important;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.10);
+    font-size: 1.12rem;
+}
+
+#branding a,
+#branding {
+    color: #e5e7eb !important;
+    font-size: 1.12rem;
+    letter-spacing: 1px;
+}
+
+body nav[aria-label="breadcrumbs"], 
+#container nav[aria-label="breadcrumbs"], 
+nav.breadcrumbs[aria-label="breadcrumbs"] #main{
+    background: #111827 ;
+    color: #e5e7eb ;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 6px 15px !important;
+}
+
+
+
+
+/* ✅ QUICK ACTIONS SECTION */
+.action-section {
+    background: var(--color-surface, white);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-text, #333);
+    border-bottom: 2px solid var(--color-primary, #007bff);
+    padding-bottom: 10px;
+}
+
+/* Check-in/Check-out status boxes */
+.status-box {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid;
+}
+
+.status-box.checked-in {
+    background: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.status-box.checked-out {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+.status-box p {
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+}
+
+.status-box p:last-child {
+    margin-bottom: 0;
+}
+
+.status-box .status-title {
+    color: #155724;
+    font-weight: 600;
+}
+
+.status-box.checked-out .status-title {
+    color: #6c757d;
+}
+
+.status-box .status-detail {
+    color: #155724;
+    font-size: 0.9em;
+}
+
+.status-box.checked-out .status-detail {
+    color: #6c757d;
+}
+
+/* Auto-checkout badge */
+.badge-auto {
+    background: #ffc107;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.action-section .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.action-section .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-section .btn-checkout {
+    background: #dc3545;
+    color: white;
+}
+
+.action-section .btn-checkout:hover {
+    background: #c82333;
+}
+
+.action-section .btn-salary {
+    background: #28a745;
+    color: white;
+}
+
+.action-section .btn-salary:hover {
+    background: #218838;
+}
+
+.action-section .btn-refresh {
+    background: #007bff;
+    color: white;
+}
+
+.action-section .btn-refresh:hover {
+    background: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-section .btn {
+        width: 100%;
+    }
+}
+
+
+/* Responsive tweaks */
+@media (max-width: 700px) {
+    nav[aria-label="Breadcrumbs"] {
+        padding: 8px 8px !important;
+        font-size: 1rem;
+    }
+    #header {
+        padding: 0 10px;
+    }
+}
+

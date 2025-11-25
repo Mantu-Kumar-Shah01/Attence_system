@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Dashboard</title>
+   <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --panel: #111827;
+                --panel-2: #0b1220;
+                --text: #e5e7eb;
+                --muted: #94a3b8;
+                --brand: #3b82f6;
+                --brand-600: #2563eb;
+                --accent: #22c55e;
+                --warn: #ef4444;
+                --card: #111827;
+                --border: #1f2937;
+            }
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, Roboto;
+            background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0%, var(--bg) 60%),
+                        radial-gradient(800px 500px at 110% 10%, #1f2937 0%, var(--bg) 50%),
+                        var(--bg);
+            color: var(--text);
+            padding: 16px;
+            overflow-x: hidden;
+        }
+
+        .salary-dashboard {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 20px;
+            max-width: 500px;
+            max-height: 90vh;
+            margin: 0 auto;
+            overflow-y: auto;
+        }
+
+        .salary-dashboard::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .salary-dashboard::-webkit-scrollbar-track {
+            background: var(--panel-2);
+            border-radius: 10px;
+        }
+
+        .salary-dashboard::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .salary-dashboard::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
+
+        .salary-dashboard h2 {
+            font-size: 20px;
+            margin: 0 0 14px 0;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: var(--text);
+            border-bottom: 2px solid var(--brand);
+            padding-bottom: 8px;
+        }
+
+        .salary-dashboard .summary {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .salary-dashboard .summary span {
+            display: inline-block;
+            min-width: 130px;
+            color: var(--muted);
+        }
+
+        .salary-dashboard .summary strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .salary-dashboard .pill {
+            padding: 4px 9px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            background: var(--panel-2);
+            color: var(--text);
+            font-size: 12px;
+        }
+
+        .salary-dashboard .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 14px 0;
+        }
+
+        .salary-dashboard .kpi {
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .salary-dashboard .kpi .label {
+            font-size: 10px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .salary-dashboard .kpi .value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--brand);
+        }
+
+        .salary-dashboard .salary-box {
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .salary-dashboard .salary-box .label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .salary-dashboard .salary-box .amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .salary-dashboard .formula {
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--panel-2);
+            border-radius: 8px;
+            margin: 14px 0;
+            padding: 9px 11px;
+            border: 1px solid var(--border);
+            word-wrap: break-word;
+        }
+
+        .salary-dashboard .formula strong {
+            color: var(--text);
+        }
+
+        .salary-dashboard .error {
+            color: var(--warn);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 11px 14px;
+            border-radius: 10px;
+            margin: 14px 0;
+            border: 1px solid var(--warn);
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* Responsive - 2 columns maintained on mobile */
+        @media (max-width: 700px) {
+            body { padding: 8px; }
+            .salary-dashboard {
+                padding: 14px 16px;
+                border-radius: 10px;
+                max-width: 100%;
+                max-height: 88vh;
+            }
+            .salary-dashboard h2 {
+                font-size: 18px;
+            }
+            .salary-dashboard .summary {
+                font-size: 12px;
+                line-height: 1.6;
+            }
+            .salary-dashboard .summary span {
+                min-width: 100px;
+            }
+            .salary-dashboard .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 7px;
+            }
+            .salary-dashboard .kpi {
+                padding: 8px 6px;
+            }
+            .salary-dashboard .kpi .label {
+                font-size: 9px;
+            }
+            .salary-dashboard .kpi .value {
+                font-size: 14px;
+            }
+            .salary-dashboard .salary-box {
+                padding: 14px;
+            }
+            .salary-dashboard .salary-box .amount {
+                font-size: 24px;
+            }
+            .salary-dashboard .formula {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 5px; }
+            .salary-dashboard {
+                padding: 12px 14px;
+                max-height: 85vh;
+            }
+            .salary-dashboard h2 {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+            .salary-dashboard .summary {
+                font-size: 11px;
+            }
+            .salary-dashboard .summary span {
+                min-width: 90px;
+            }
+            .salary-dashboard .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .salary-dashboard .kpi {
+                padding: 7px 5px;
+            }
+            .salary-dashboard .kpi .label {
+                font-size: 8px;
+            }
+            .salary-dashboard .kpi .value {
+                font-size: 13px;
+            }
+            .salary-dashboard .salary-box .amount {
+                font-size: 20px;
+            }
+        }
+</style>
+
+
+</head>
+<body>
+    <div class="salary-dashboard">
+        <h2>Salary Summary ({{ month }}/{{ year }})</h2>
+        
+        {% if error %}
+          <div class="error">{{ error }}</div>
+        {% else %}
+        
+        <div class="summary">
+            <span><strong>Employee:</strong></span> {{ emp.E_name }}<br>
+            <span><strong>ID:</strong></span> {{ emp.E_id }}<br>
+            <span><strong>Salary type:</strong></span> {{ salary_type|title }}<br>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi">
+                <div class="label">Hourly Rate</div>
+                <div class="value">₹{{ hourly_rate }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Monthly Salary</div>
+                <div class="value">₹{{ monthly_salary }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Present Days</div>
+                <div class="value">{{ total_days_present }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Full Days</div>
+                <div class="value">{{ full_days }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Partial Days</div>
+                <div class="value">{{ partial_days }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Total Hours</div>
+                <div class="value">{{ total_hours }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Overtime Hours</div>
+                <div class="value">{{ overtime_hours }}</div>
+            </div>
+            <div class="kpi">
+                <div class="label">Overtime Money</div>
+                <div class="value">₹{{ overtime_money }}</div>
+            </div>
+        </div>
+
+        <div class="formula">
+            <strong>Formula:</strong> {{ salary_formula }}
+        </div>
+
+        <div class="salary-box">
+            <div class="label">This Month's Salary</div>
+            <div class="amount">₹{{ this_month_income }}</div>
+        </div>
+        
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -14,4 +14,5 @@ urlpatterns = [
     path("admin/logout/", admin_logout_custom, name="admin_logout_custom"),
     path("admin/", admin.site.urls),
     path("", include("locationapp.urls")),
+    
 ]

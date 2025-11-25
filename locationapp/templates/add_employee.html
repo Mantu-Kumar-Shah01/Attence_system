@@ -1,116 +1,350 @@
-{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Employee</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - {{ emp.E_name }}</title>
     <style>
-        /* Add your styling here */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.75)),
-                        url('{% static "images/background_image.jpg" %}');
-            background-size: cover;
-        }
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 30px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            box-shadow: 0 8px 28px rgba(40,40,60,0.25);
-            
-        }
-        h2 {
-            text-align: center;
-            color: #1f2a44;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #1f2a44;
-            font-weight: 600;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #d6e0f5;
-            border-radius: 8px;
-            font-size: 14px;
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2563eb;
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        /* Live Timer Card */
+        .timer-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(17, 153, 142, 0.4);
             color: white;
+        }
+        
+        .timer-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .timer-label {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+        
+        .work-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-box h3 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        /* Status indicators */
+        .status-normal {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .status-overtime {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .status-complete {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .status-sunday {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
             border: none;
-            border-radius: 8px;
+            font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
-        button:hover {
-            background: #1749b4;
+        
+        .btn-checkout {
+            background: #dc3545;
+            color: white;
         }
-        .error {
-            background: #fee;
-            color: #c33;
-            padding: 10px;
-            border-radius: 8px;
+        
+        .btn-checkout:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-salary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-salary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        /* Info cards */
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: #333;
             margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
         }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
         }
-        .checkbox-group input {
-            width: auto;
+        
+        .badge-sunday {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-overtime {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-complete {
+            background: #d4edda;
+            color: #155724;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h2>Add Employee</h2>
-
-    {% if error %}
-    <div class="error">{{ error }}</div>
-    {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-
-        <div class="form-group">
-            <label for="E_id">Employee ID *</label>
-            <input type="text" id="E_id" name="E_id" required>
+    <div class="container">
+        <div class="header">
+            <h1>👋 Welcome, {{ emp.E_name }}</h1>
+            <p style="color: #666;">Employee ID: {{ emp.E_id }}</p>
         </div>
-
-        <div class="form-group">
-            <label for="E_name">Employee Name *</label>
-            <input type="text" id="E_name" name="E_name" required>
+        
+        {% if today_record and today_record.check_in_time and not today_record.check_out_time %}
+        <!-- Live Timer Card -->
+        <div class="timer-card" id="timerCard">
+            <div class="timer-label">⏱ Working Time Today</div>
+            <div class="timer-display" id="liveTimer">00:00:00</div>
+            
+            <div class="work-status">
+                <div class="stat-box">
+                    <h3 id="hoursWorked">0.00</h3>
+                    <p>Hours Worked</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="fullDays">0.00</h3>
+                    <p>Full Days</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="overtimeHours">0.00</h3>
+                    <p>Overtime Hours</p>
+                </div>
+            </div>
+            
+            <div id="statusMessage" style="font-size: 1.2em; margin-top: 20px;">
+                <!-- Dynamic status message -->
+            </div>
+            
+            <div class="action-buttons">
+                <a href="{% url 'checkout' %}" class="btn btn-checkout"> Check Out</a>
+                <a href="{% url 'employee_salary' %}" class="btn btn-salary"> View My Salary</a>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="salary">Salary *</label>
-            <input type="number" id="salary" name="salary" step="0.01" required>
+        
+        <script>
+        // Check-in time from server
+        const checkInTime = new Date("{{ today_record.check_in_time|date:'c' }}");
+        const standardHours = {{ emp.standard_hours_per_day }};
+        const isSunday = {{ today_record.is_sunday|yesno:"true,false" }};
+        
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - checkInTime;
+            
+            // Calculate time components
+            const totalSeconds = Math.floor(diff / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            // Format display
+            const hoursStr = String(hours).padStart(2, '0');
+            const minutesStr = String(minutes).padStart(2, '0');
+            const secondsStr = String(seconds).padStart(2, '0');
+            
+            // Update timer display
+            document.getElementById('liveTimer').textContent = 
+                `${hoursStr}:${minutesStr}:${secondsStr}`;
+            
+            // Calculate metrics
+            const hoursWorked = (totalSeconds / 3600).toFixed(2);
+            const fullDays = (hoursWorked / standardHours).toFixed(2);
+            const overtimeHours = Math.max(0, hoursWorked - standardHours).toFixed(2);
+            
+            // Update stats
+            document.getElementById('hoursWorked').textContent = hoursWorked;
+            document.getElementById('fullDays').textContent = fullDays;
+            document.getElementById('overtimeHours').textContent = overtimeHours;
+            
+            // Update status message and card color
+            const timerCard = document.getElementById('timerCard');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            if (isSunday) {
+                timerCard.className = 'timer-card status-sunday';
+                statusMessage.innerHTML = ' Working on Sunday - All hours count as OVERTIME! ';
+            } else if (hoursWorked >= standardHours) {
+                const extraHours = (hoursWorked - standardHours).toFixed(2);
+                timerCard.className = 'timer-card status-complete';
+                statusMessage.innerHTML = ` Full day completed! +${extraHours} overtime hours `;
+            } else {
+                const remaining = (standardHours - hoursWorked).toFixed(2);
+                timerCard.className = 'timer-card status-normal';
+                statusMessage.innerHTML = ` ${remaining} hours remaining for full day`;
+            }
+        }
+        
+        // Update every second
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Initial call
+        
+        // Auto-checkout monitoring (location check every 60 seconds)
+        function monitorLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    fetch("{% url 'update_location' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: `latitude=${lat}&longitude=${lon}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.auto_checked_out) {
+                            alert(" Auto checked out - you moved " + data.distance + "m from office.");
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+        }
+        
+        setInterval(monitorLocation, 60000);
+        monitorLocation();
+        </script>
+        
+        {% elif today_record and today_record.check_out_time %}
+        <!-- Already checked out today -->
+        <div class="info-card">
+            <h3> Today's Work Summary</h3>
+            <p><strong>Check-in:</strong> {{ today_record.check_in_time|time:"h:i A" }}</p>
+            <p><strong>Check-out:</strong> {{ today_record.check_out_time|time:"h:i A" }}</p>
+            <p><strong>Hours Worked:</strong> {{ today_record.hours_worked }} hours</p>
+            <p><strong>Regular Hours:</strong> {{ today_record.regular_hours }} hours</p>
+            <p><strong>Overtime:</strong> {{ today_record.overtime_hours }} hours
+                {% if today_record.is_sunday %}
+                    <span class="badge badge-sunday">Sunday Work</span>
+                {% elif today_record.overtime_hours > 0 %}
+                    <span class="badge badge-overtime">Overtime</span>
+                {% endif %}
+            </p>
+            {% if today_record.auto_checkout %}
+                <p style="color: #856404;"> Auto checked out: {{ today_record.checkout_reason }}</p>
+            {% endif %}
+            
+            <div class="action-buttons">
+                <a href="{% url 'employee_salary' %}" class="btn btn-salary"> View My Salary</a>
+            </div>
         </div>
-
-        <div class="form-group checkbox-group">
-            <input type="checkbox" id="is_manager" name="is_manager">
-            <label for="is_manager">Is Manager</label>
+        {% else %}
+        <!-- Not checked in yet -->
+        <div class="info-card">
+            <h3> You haven't checked in today</h3>
+            <p>Go to the <a href="{% url 'home' %}">home page</a> to mark your attendance.</p>
         </div>
-
-        <button type="submit">Add Employee</button>
-    </form>
-
-    <div style="margin-top: 20px; text-align: center;">
-        <a href="{% url 'manager_dashboard' %}" style="color: #2563eb; text-decoration: none;">Back to Dashboard</a>
+        {% endif %}
+        
+        <!-- Monthly Summary -->
+        <div class="info-card">
+            <h3>This Month Summary</h3>
+            <!-- Add attendance calendar here if you have it -->
+            <a href="{% url 'employee_salary' %}" class="btn btn-salary">View Detailed Salary Report</a>
+        </div>
     </div>
-</div>
-
 </body>
 </html>

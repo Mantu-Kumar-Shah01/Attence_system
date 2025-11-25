@@ -37,11 +37,11 @@
 
 
 
-            <div class="permission-buttons">
-                {% if permissions.can_view_attendance %}
-                <button class="permission-btn enabled" onclick="showSection('view_attendance')"> Attendance</button>
+            <div class="permission-buttons "  style="margin-top: 20px;">
+                {% if permissions.can_add_employee %}
+                <button class="permission-btn enabled" onclick="showSection('add_employee')"> Add Employee</button>
                 {% else %}
-                <button class="permission-btn disabled" disabled> Attendance</button>
+                <button class="permission-btn disabled" disabled>Add Employee</button>
                 {% endif %}
 
                 {% if permissions.can_edit_salary %}
@@ -50,11 +50,16 @@
                 <button class="permission-btn disabled" disabled> Edit Salary</button>
                 {% endif %}
 
-                {% if permissions.can_add_employee %}
-                <button class="permission-btn enabled" onclick="showSection('add_employee')"> Add Employee</button>
-                {% else %}
-                <button class="permission-btn disabled" disabled>Add Employee</button>
-                {% endif %}
+                <!-- Add this button in your manager dashboard -->
+                <div class="manager-actions permission-buttons" >
+                  <div>  <a href="{% url 'manager_salary_overview' %}" class="btn enabled  permission-btn" >
+                        View Employees Salaries
+                    </a></div>
+                    
+                    <div> <a href="{% url 'manager_dashboard' %}" class="btn  permission-btn" >
+                        Attendance Overview
+                    </a></div>
+                </div>
 
                 {% if permissions.can_delete_employee %}
                 <button class="permission-btn enabled" onclick="showSection('delete_employee')"> Delete</button>
@@ -67,6 +72,7 @@
                 {% else %}
                 <button class="permission-btn disabled" disabled> Reports</button>
                 {% endif %}
+                
             </div>
         </div>
 
@@ -276,6 +282,9 @@
             }
         }
     </script>
+
+
+
 </body>
 
 </html>

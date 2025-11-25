@@ -1,104 +1,204 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Employee</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,600&display=swap" rel="stylesheet">
     <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --panel: #111827;
+                --panel-2: #0b1220;
+                --text: #e5e7eb;
+                --muted: #94a3b8;
+                --brand: #3b82f6;
+                --brand-600: #2563eb;
+                --accent: #22c55e;
+                --warn: #ef4444;
+                --card: #111827;
+                --border: #1f2937;
+            }
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.75)),
-                        url('{% static "images/background_image.jpg" %}');
-            background-size: cover;
             margin: 0;
-            padding: 0;
+            font-family: ui-sans-serif, system-ui, Roboto;
+            background: radial-gradient(1200px 600px at 20% -10%, #1f2937 0%, var(--bg) 60%),
+                        radial-gradient(800px 500px at 110% 10%, #1f2937 0%, var(--bg) 50%),
+                        var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
+
         .container {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 32px;
             max-width: 500px;
-            margin: 50px auto;
-            padding: 30px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            box-shadow: 0 8px 28px rgba(40,40,60,0.25);
+            width: 100%;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
         }
+
         h2 {
             text-align: center;
-            color: #1f2a44;
+            color: var(--warn);
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid var(--warn);
+            padding-bottom: 12px;
         }
+
         .warning-box {
-            background: #fef2f2;
-            border: 2px solid #fca5a5;
-            color: #991b1b;
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid var(--warn);
+            color: var(--warn);
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
             text-align: center;
+            font-weight: 600;
+            font-size: 15px;
         }
+
+        .warning-box strong {
+            font-weight: 700;
+        }
+
         .employee-info {
-            background: #e8f0fe;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: var(--panel-2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
             text-align: center;
+            border: 1px solid var(--border);
         }
+
+        .employee-info h3 {
+            color: var(--text);
+            font-size: 22px;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+        }
+
+        .employee-info p {
+            color: var(--muted);
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        .employee-info strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .confirmation-text {
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            margin-top: 28px;
         }
-        button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .delete-btn {
-            background: #dc2626;
-            color: white;
-        }
-        .delete-btn:hover {
-            background: #b91c1c;
-        }
+
+        button,
         .cancel-btn {
-    display: inline-block;
-    padding: 12px 24px;
-    margin:12px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    text-decoration: none;
-    background-color: #ef4444; /* red for cancel/danger */
-    color: white;
-    border: 1px solid #dc2626;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-}
+            flex: 1;
+            height: 44px;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
 
-.cancel-btn:hover,
-.cancel-btn:focus-visible {
-    background-color: #dc2626; /* darker red on hover/focus */
-    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.7);
-    transform: translateY(-2px);
-    outline: none;
-}
+        .delete-btn {
+            background: linear-gradient(135deg, var(--warn), #dc2626);
+            border-color: #b91c1c;
+            color: white;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+        }
 
-.cancel-btn:active {
-    transform: translateY(0);
-}
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+            transform: translateY(-2px);
+        }
 
-/* Disabled state */
-.cancel-btn:disabled {
-    background-color: #fca5a5;
-    color: #730000;
-    cursor: not-allowed;
-    box-shadow: none;
-    opacity: 0.75;
-}
+        .cancel-btn {
+            background: var(--panel-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
 
+        .cancel-btn:hover {
+            background: var(--panel);
+            border-color: var(--brand);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+        }
 
+        .delete-btn:active,
+        .cancel-btn:active {
+            transform: translateY(0);
+        }
+
+        .delete-btn:disabled,
+        .cancel-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+                margin-bottom: 18px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button,
+            .cancel-btn {
+                width: 100%;
+                height: 42px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -113,17 +213,18 @@
     <div class="employee-info">
         <h3>{{ employee.E_name }}</h3>
         <p>Employee ID: <strong>{{ employee.E_id }}</strong></p>
-        <p>Salary: ₹<strong>{{ employee.salary }}</strong></p>
+        <p>Salary: <strong>₹{{ employee.salary }}</strong></p>
     </div>
 
-    <p style="text-align: center; color: #666;">
-        Are you sure you want to permanently delete this employee?
+    <p class="confirmation-text">
+        Are you sure you want to permanently delete this employee?<br>
+        All associated data will be removed from the system.
     </p>
 
-    <form method="POST" style="margin-bottom: 0;">
+    <form method="POST">
         {% csrf_token %}
         <div class="button-group">
-            <button type="submit" class="delete-btn"> Delete</button>
+            <button type="submit" class="delete-btn">Delete Permanently</button>
             <a href="{% url 'manager_dashboard' %}" class="cancel-btn">Cancel</a>
         </div>
     </form>

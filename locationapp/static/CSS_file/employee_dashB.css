@@ -1,4 +1,5 @@
 
+   @media (prefers-color-scheme: dark) {
     :root {
         --bg: #0f172a;
         --panel: #111827;
@@ -11,7 +12,11 @@
         --warn: #ef4444;
         --card: #111827;
         --border: #1f2937;
+        /* Do NOT add --primary: #264b5d; */
+        /* Add any other variables you want to customize for dark mode */
     }
+}
+
     * { box-sizing: border-box; }
     body {
         margin: 0;
@@ -198,7 +203,7 @@
     /* ✅ FIXED HEIGHT AND SCROLLBAR FOR PROFILE AND ATTENDANCE CARDS */
     .layout .card:nth-child(1),
     .layout .card:nth-child(2) {
-        max-height: 450px;
+        max-height: 600px;
         overflow-y: auto;
     }
 
